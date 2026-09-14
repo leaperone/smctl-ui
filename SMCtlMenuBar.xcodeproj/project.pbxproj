@@ -15,6 +15,9 @@
 		A10000000000000000000035 /* DaemonClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000015 /* DaemonClient.swift */; };
 		A10000000000000000000036 /* SMCtlClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000016 /* SMCtlClientError.swift */; };
 		A10000000000000000000037 /* SMCtlProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000017 /* SMCtlProtocol.swift */; };
+		A10000000000000000000038 /* BatteryMenuSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000019 /* BatteryMenuSection.swift */; };
+		A10000000000000000000039 /* BatteryActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001C /* BatteryActions.swift */; };
+		A1000000000000000000003A /* BatteryActionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001E /* BatteryActionsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +42,9 @@
 		A10000000000000000000015 /* DaemonClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaemonClient.swift; sourceTree = "<group>"; };
 		A10000000000000000000016 /* SMCtlClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMCtlClientError.swift; sourceTree = "<group>"; };
 		A10000000000000000000017 /* SMCtlProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMCtlProtocol.swift; sourceTree = "<group>"; };
+		A10000000000000000000019 /* BatteryMenuSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryMenuSection.swift; sourceTree = "<group>"; };
+		A1000000000000000000001C /* BatteryActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryActions.swift; sourceTree = "<group>"; };
+		A1000000000000000000001E /* BatteryActionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryActionsTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +69,8 @@
 			isa = PBXGroup;
 			children = (
 				A10000000000000000000011 /* MenuBarRootView.swift */,
+				A10000000000000000000019 /* BatteryMenuSection.swift */,
+				A1000000000000000000001C /* BatteryActions.swift */,
 				A10000000000000000000012 /* DaemonSession.swift */,
 				A10000000000000000000013 /* MenuSnapshot.swift */,
 			);
@@ -74,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				A10000000000000000000014 /* MenuSnapshotTests.swift */,
+				A1000000000000000000001E /* BatteryActionsTests.swift */,
 			);
 			name = SMCtlMenuBarTests;
 			path = Tests/SMCtlMenuBarTests;
@@ -213,6 +222,8 @@
 				A10000000000000000000031 /* MenuBarRootView.swift in Sources */,
 				A10000000000000000000032 /* DaemonSession.swift in Sources */,
 				A10000000000000000000033 /* MenuSnapshot.swift in Sources */,
+				A10000000000000000000038 /* BatteryMenuSection.swift in Sources */,
+				A10000000000000000000039 /* BatteryActions.swift in Sources */,
 				A10000000000000000000035 /* DaemonClient.swift in Sources */,
 				A10000000000000000000036 /* SMCtlClientError.swift in Sources */,
 				A10000000000000000000037 /* SMCtlProtocol.swift in Sources */,
@@ -224,6 +235,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10000000000000000000034 /* MenuSnapshotTests.swift in Sources */,
+				A1000000000000000000003A /* BatteryActionsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

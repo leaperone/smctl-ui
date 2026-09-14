@@ -2,7 +2,7 @@
 
 SwiftUI `MenuBarExtra` companion for [smctl](https://github.com/leaperone/smctl).
 
-Depends on `SMCtlClient` and `SMCtlProtocol` from smctl. Policy stays in `smctld`.
+Depends on `SMCtlClient` and `SMCtlProtocol` from smctl. Policy stays in `smctld`. The extra shows charge percent and the configured limit, and sends maintain (`80`, `70-80`, `stop`) and charging on/off through `DaemonClient`.
 
 ## Path pin (stack)
 

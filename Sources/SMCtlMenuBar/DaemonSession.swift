@@ -23,6 +23,13 @@ public final class DaemonSession {
         }
     }
 
+    public func perform(_ command: BatteryCommand) {
+        Task {
+            let next = await Task.detached { Self.writeThenFetch(command) }.value
+            self.snapshot = next
+        }
+    }
+
     // XPC calls block on a semaphore inside DaemonClient. Never run them on the main actor.
     nonisolated private static func fetchLive() -> MenuSnapshot {
         do {
@@ -33,5 +40,23 @@ public final class DaemonSession {
         } catch {
             return .from(error: error)
         }
+    }
+
+    nonisolated private static func writeThenFetch(_ command: BatteryCommand) -> MenuSnapshot {
+        do {
+            try BatteryActions.perform(command)
+            return fetchLive()
+        } catch {
+            return snapshotAfterFailedWrite(error)
+        }
+    }
+
+    nonisolated private static func snapshotAfterFailedWrite(_ error: Error) -> MenuSnapshot {
+        let live = fetchLive()
+        let message = MenuSnapshot.errorMessage(error)
+        if case .connected = live {
+            return live.attachingWriteError(message.isEmpty ? "Write failed" : message)
+        }
+        return .from(error: error)
     }
 }
