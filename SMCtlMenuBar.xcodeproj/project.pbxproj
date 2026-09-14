@@ -1,0 +1,389 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000000000000000000030 /* SMCtlMenuBarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000010 /* SMCtlMenuBarApp.swift */; };
+		A10000000000000000000031 /* MenuBarRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000011 /* MenuBarRootView.swift */; };
+		A10000000000000000000032 /* DaemonSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000012 /* DaemonSession.swift */; };
+		A10000000000000000000033 /* MenuSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000013 /* MenuSnapshot.swift */; };
+		A10000000000000000000034 /* MenuSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000014 /* MenuSnapshotTests.swift */; };
+		A10000000000000000000035 /* SMCtlClient in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000061 /* SMCtlClient */; };
+		A10000000000000000000036 /* SMCtlProtocol in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000062 /* SMCtlProtocol */; };
+		A10000000000000000000037 /* SMCtlClient in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000063 /* SMCtlClient */; };
+		A10000000000000000000038 /* SMCtlProtocol in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000064 /* SMCtlProtocol */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A10000000000000000000080 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A10000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A10000000000000000000002;
+			remoteInfo = SMCtlMenuBar;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A10000000000000000000007 /* SMCtlMenuBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SMCtlMenuBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000000000008 /* SMCtlMenuBarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SMCtlMenuBarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000000000009 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A10000000000000000000010 /* SMCtlMenuBarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMCtlMenuBarApp.swift; sourceTree = "<group>"; };
+		A10000000000000000000011 /* MenuBarRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarRootView.swift; sourceTree = "<group>"; };
+		A10000000000000000000012 /* DaemonSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaemonSession.swift; sourceTree = "<group>"; };
+		A10000000000000000000013 /* MenuSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSnapshot.swift; sourceTree = "<group>"; };
+		A10000000000000000000014 /* MenuSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSnapshotTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A10000000000000000000022 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000035 /* SMCtlClient in Frameworks */,
+				A10000000000000000000036 /* SMCtlProtocol in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A10000000000000000000023 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000037 /* SMCtlClient in Frameworks */,
+				A10000000000000000000038 /* SMCtlProtocol in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A10000000000000000000004 /* SMCtlMenuBar */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000010 /* SMCtlMenuBarApp.swift */,
+				A10000000000000000000011 /* MenuBarRootView.swift */,
+				A10000000000000000000012 /* DaemonSession.swift */,
+				A10000000000000000000013 /* MenuSnapshot.swift */,
+			);
+			name = SMCtlMenuBar;
+			path = Sources/SMCtlMenuBar;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000005 /* SMCtlMenuBarTests */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000014 /* MenuSnapshotTests.swift */,
+			);
+			name = SMCtlMenuBarTests;
+			path = Tests/SMCtlMenuBarTests;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000006 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000007 /* SMCtlMenuBar.app */,
+				A10000000000000000000008 /* SMCtlMenuBarTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000090 /* SMCtlMenuBar */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000004 /* SMCtlMenuBar */,
+				A10000000000000000000005 /* SMCtlMenuBarTests */,
+				A10000000000000000000009 /* Info.plist */,
+				A10000000000000000000006 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A10000000000000000000002 /* SMCtlMenuBar */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A10000000000000000000041 /* Build configuration list for PBXNativeTarget "SMCtlMenuBar" */;
+			buildPhases = (
+				A10000000000000000000020 /* Sources */,
+				A10000000000000000000022 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SMCtlMenuBar;
+			packageProductDependencies = (
+				A10000000000000000000061 /* SMCtlClient */,
+				A10000000000000000000062 /* SMCtlProtocol */,
+			);
+			productName = SMCtlMenuBar;
+			productReference = A10000000000000000000007 /* SMCtlMenuBar.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A10000000000000000000003 /* SMCtlMenuBarTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A10000000000000000000042 /* Build configuration list for PBXNativeTarget "SMCtlMenuBarTests" */;
+			buildPhases = (
+				A10000000000000000000021 /* Sources */,
+				A10000000000000000000023 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A10000000000000000000081 /* PBXTargetDependency */,
+			);
+			name = SMCtlMenuBarTests;
+			packageProductDependencies = (
+				A10000000000000000000063 /* SMCtlClient */,
+				A10000000000000000000064 /* SMCtlProtocol */,
+			);
+			productName = SMCtlMenuBarTests;
+			productReference = A10000000000000000000008 /* SMCtlMenuBarTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A10000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				ORGANIZATIONNAME = leaperone;
+				TargetAttributes = {
+					A10000000000000000000002 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					A10000000000000000000003 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = A10000000000000000000002;
+					};
+				};
+			};
+			buildConfigurationList = A10000000000000000000040 /* Build configuration list for PBXProject "SMCtlMenuBar" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A10000000000000000000090 /* SMCtlMenuBar */;
+			packageReferences = (
+				A10000000000000000000060 /* XCLocalSwiftPackageReference "Packages/smctl-client" */,
+			);
+			productRefGroup = A10000000000000000000006 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A10000000000000000000002 /* SMCtlMenuBar */,
+				A10000000000000000000003 /* SMCtlMenuBarTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A10000000000000000000020 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000030 /* SMCtlMenuBarApp.swift in Sources */,
+				A10000000000000000000031 /* MenuBarRootView.swift in Sources */,
+				A10000000000000000000032 /* DaemonSession.swift in Sources */,
+				A10000000000000000000033 /* MenuSnapshot.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A10000000000000000000021 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000034 /* MenuSnapshotTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A10000000000000000000081 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A10000000000000000000002 /* SMCtlMenuBar */;
+			targetProxy = A10000000000000000000080 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		A10000000000000000000050 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		A10000000000000000000051 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		A10000000000000000000052 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGNING_REQUIRED = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = one.leaper.smctl.menubar;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		A10000000000000000000053 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGNING_REQUIRED = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = one.leaper.smctl.menubar;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		A10000000000000000000054 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGNING_REQUIRED = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = one.leaper.smctl.menubar.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SMCtlMenuBar.app/Contents/MacOS/SMCtlMenuBar";
+			};
+			name = Debug;
+		};
+		A10000000000000000000055 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGNING_REQUIRED = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = one.leaper.smctl.menubar.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SMCtlMenuBar.app/Contents/MacOS/SMCtlMenuBar";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A10000000000000000000040 /* Build configuration list for PBXProject "SMCtlMenuBar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000000000000000000050 /* Debug */,
+				A10000000000000000000051 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A10000000000000000000041 /* Build configuration list for PBXNativeTarget "SMCtlMenuBar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000000000000000000052 /* Debug */,
+				A10000000000000000000053 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A10000000000000000000042 /* Build configuration list for PBXNativeTarget "SMCtlMenuBarTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000000000000000000054 /* Debug */,
+				A10000000000000000000055 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		A10000000000000000000060 /* XCLocalSwiftPackageReference "Packages/smctl-client" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/smctl-client;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A10000000000000000000061 /* SMCtlClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A10000000000000000000060 /* XCLocalSwiftPackageReference "Packages/smctl-client" */;
+			productName = SMCtlClient;
+		};
+		A10000000000000000000062 /* SMCtlProtocol */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A10000000000000000000060 /* XCLocalSwiftPackageReference "Packages/smctl-client" */;
+			productName = SMCtlProtocol;
+		};
+		A10000000000000000000063 /* SMCtlClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A10000000000000000000060 /* XCLocalSwiftPackageReference "Packages/smctl-client" */;
+			productName = SMCtlClient;
+		};
+		A10000000000000000000064 /* SMCtlProtocol */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A10000000000000000000060 /* XCLocalSwiftPackageReference "Packages/smctl-client" */;
+			productName = SMCtlProtocol;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = A10000000000000000000001 /* Project object */;
+}
