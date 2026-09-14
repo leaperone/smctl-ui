@@ -38,6 +38,10 @@ public struct FanMenuSection: View {
             }
             .accessibilityIdentifier("fan-profile-\(choice.rawValue)")
         }
+        Button("Return to auto") {
+            perform(.returnToAuto)
+        }
+        .accessibilityIdentifier("fan-return-to-auto")
     }
 
     private func title(for choice: FanProfileChoice) -> String {

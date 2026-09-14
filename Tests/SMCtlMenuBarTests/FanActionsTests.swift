@@ -27,7 +27,7 @@ func returnToAutoIsNotAProfileWrite() {
 
 @Test
 func menuChoicesMapToFanCommands() {
-    #expect(FanProfileChoice.auto.command == .returnToAuto)
+    #expect(FanProfileChoice.auto.command == .setProfile(.auto))
     #expect(FanProfileChoice.quiet.command == .setProfile(.quiet))
     #expect(FanProfileChoice.full.command == .setProfile(.full))
 }

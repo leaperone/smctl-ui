@@ -23,17 +23,11 @@ public enum FanProfileChoice: String, CaseIterable, Equatable, Hashable, Sendabl
     }
 
     public static func matching(profile: String) -> FanProfileChoice? {
-        let trimmed = profile.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        return FanProfileChoice(rawValue: trimmed)
+        FanProfileChoice(rawValue: profile.trimmingCharacters(in: .whitespacesAndNewlines).lowercased())
     }
 
     public var command: FanCommand {
-        switch self {
-        case .auto:
-            return .returnToAuto
-        case .quiet, .full:
-            return .setProfile(self)
-        }
+        .setProfile(self)
     }
 }
 
