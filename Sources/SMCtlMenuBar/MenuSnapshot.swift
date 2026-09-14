@@ -6,7 +6,7 @@ import SMCtlProtocol
 public enum MenuSnapshot: Equatable, Sendable {
     case idle
     case loading
-    case connected(pingLine: String, battery: BatterySnapshot)
+    case connected(pingLine: String, battery: BatterySnapshot, fans: FanSnapshot)
     case disconnected(message: String)
 }
 
@@ -88,14 +88,98 @@ public struct BatterySnapshot: Equatable, Sendable {
     }
 }
 
+public struct FanRPMRow: Equatable, Sendable {
+    public var index: Int
+    public var actualRPM: Double?
+    public var targetRPM: Double?
+    public var mode: String
+
+    public init(index: Int, actualRPM: Double?, targetRPM: Double?, mode: String) {
+        self.index = index
+        self.actualRPM = actualRPM
+        self.targetRPM = targetRPM
+        self.mode = mode
+    }
+
+    public var line: String {
+        "Fan \(index) · \(Self.formatRPM(actualRPM))"
+    }
+
+    public static func formatRPM(_ value: Double?) -> String {
+        guard let value else {
+            return "—"
+        }
+        return "\(String(format: "%.0f", value)) RPM"
+    }
+}
+
+public struct FanSnapshot: Equatable, Sendable {
+    public var profile: String
+    public var rows: [FanRPMRow]
+    public var daemonMessage: String?
+    public var lastWriteError: String?
+
+    public static let thermalGuardLine = "Thermal guard remains active."
+
+    public init(
+        profile: String,
+        rows: [FanRPMRow],
+        daemonMessage: String? = nil,
+        lastWriteError: String? = nil
+    ) {
+        self.profile = profile
+        self.rows = rows
+        self.daemonMessage = daemonMessage
+        self.lastWriteError = lastWriteError
+    }
+
+    public static func from(_ fans: FansStatusDTO, lastWriteError: String? = nil) -> FanSnapshot {
+        FanSnapshot(
+            profile: fans.profile,
+            rows: fans.fans.map { fan in
+                FanRPMRow(
+                    index: fan.index,
+                    actualRPM: fan.actualRPM,
+                    targetRPM: fan.targetRPM,
+                    mode: fan.mode
+                )
+            },
+            daemonMessage: fans.message,
+            lastWriteError: lastWriteError
+        )
+    }
+
+    public var profileLine: String {
+        "Profile \(profile)"
+    }
+
+    public var emptyLine: String {
+        if let daemonMessage, !daemonMessage.isEmpty {
+            return daemonMessage
+        }
+        return "No fans were reported by SMC."
+    }
+
+    public var selectedProfile: FanProfileChoice? {
+        FanProfileChoice.matching(profile: profile)
+    }
+
+    public func attachingWriteError(_ message: String) -> FanSnapshot {
+        var copy = self
+        copy.lastWriteError = message
+        return copy
+    }
+}
+
 extension MenuSnapshot {
-    public static func from(ping: PingDTO, battery: BatteryStatusDTO) -> MenuSnapshot {
+    public static func from(ping: PingDTO, battery: BatteryStatusDTO, fans: FansStatusDTO) -> MenuSnapshot {
         guard ping.ok else {
             return .disconnected(message: "Daemon ping returned not ok")
         }
         return .connected(
             pingLine: "smctld ok \(ping.version)",
-            battery: BatterySnapshot.from(battery)
+            battery: BatterySnapshot.from(battery),
+            fans: FanSnapshot.from(fans)
         )
     }
 
@@ -108,9 +192,22 @@ extension MenuSnapshot {
     }
 
     public func attachingWriteError(_ message: String) -> MenuSnapshot {
+        attachingBatteryWriteError(message)
+    }
+
+    public func attachingBatteryWriteError(_ message: String) -> MenuSnapshot {
         switch self {
-        case .connected(let pingLine, let battery):
-            return .connected(pingLine: pingLine, battery: battery.attachingWriteError(message))
+        case .connected(let pingLine, let battery, let fans):
+            return .connected(pingLine: pingLine, battery: battery.attachingWriteError(message), fans: fans)
+        case .idle, .loading, .disconnected:
+            return .disconnected(message: message)
+        }
+    }
+
+    public func attachingFanWriteError(_ message: String) -> MenuSnapshot {
+        switch self {
+        case .connected(let pingLine, let battery, let fans):
+            return .connected(pingLine: pingLine, battery: battery, fans: fans.attachingWriteError(message))
         case .idle, .loading, .disconnected:
             return .disconnected(message: message)
         }

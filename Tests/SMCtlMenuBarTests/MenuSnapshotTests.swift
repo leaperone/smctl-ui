@@ -14,9 +14,15 @@ func connectedSnapshotFromFakePingDTO() {
     )
     let battery = sampleBattery(percent: 80, charging: true, pluggedIn: true, limit: "80")
 
+    let fans = sampleFans()
+
     #expect(
-        MenuSnapshot.from(ping: ping, battery: battery)
-            == .connected(pingLine: "smctld ok 0.2.3", battery: BatterySnapshot.from(battery))
+        MenuSnapshot.from(ping: ping, battery: battery, fans: fans)
+            == .connected(
+                pingLine: "smctld ok 0.2.3",
+                battery: BatterySnapshot.from(battery),
+                fans: FanSnapshot.from(fans)
+            )
     )
 }
 
@@ -37,7 +43,7 @@ func failedPingIsDisconnected() {
     let battery = sampleBattery(percent: 50, charging: false, pluggedIn: false, limit: "80")
 
     #expect(
-        MenuSnapshot.from(ping: ping, battery: battery)
+        MenuSnapshot.from(ping: ping, battery: battery, fans: sampleFans())
             == .disconnected(message: "Daemon ping returned not ok")
     )
 }
@@ -58,9 +64,9 @@ func errorSnapshotIsDisconnectedWithoutLiveDaemon() {
 func missingChargePercent() {
     let ping = PingDTO(ok: true, version: "0.2.3", timestamp: Date(timeIntervalSince1970: 0))
     let battery = sampleBattery(percent: nil, charging: nil, pluggedIn: nil, limit: "80")
-    let snapshot = MenuSnapshot.from(ping: ping, battery: battery)
+    let snapshot = MenuSnapshot.from(ping: ping, battery: battery, fans: sampleFans())
 
-    guard case .connected(_, let live) = snapshot else {
+    guard case .connected(_, let live, _) = snapshot else {
         Issue.record("expected connected snapshot")
         return
     }
@@ -90,15 +96,74 @@ func maintainBandAndStopDisplay() {
 func writeErrorStaysOnConnectedSnapshot() {
     let ping = PingDTO(ok: true, version: "0.2.3", timestamp: Date(timeIntervalSince1970: 0))
     let battery = sampleBattery(percent: 80, charging: false, pluggedIn: true, limit: "80")
-    let connected = MenuSnapshot.from(ping: ping, battery: battery)
+    let connected = MenuSnapshot.from(ping: ping, battery: battery, fans: sampleFans())
     let failed = connected.attachingWriteError("Write requests require root or an admin user.")
 
-    guard case .connected(_, let live) = failed else {
+    guard case .connected(_, let live, _) = failed else {
         Issue.record("expected connected snapshot with write error")
         return
     }
     #expect(live.lastWriteError == "Write requests require root or an admin user.")
     #expect(live.chargeLine == "Battery 80% · plugged in")
+}
+
+@Test
+func emptyFansUsesDaemonMessage() {
+    let fans = FanSnapshot.from(sampleFans())
+
+    #expect(fans.profileLine == "Profile auto")
+    #expect(fans.emptyLine == "No fans were reported by SMC.")
+    #expect(fans.rows.isEmpty)
+    #expect(fans.selectedProfile == .auto)
+    #expect(FanSnapshot.thermalGuardLine == "Thermal guard remains active.")
+}
+
+@Test
+func fanRPMRowsAndSelectedProfile() {
+    let fans = FanSnapshot.from(
+        sampleFans(
+            profile: "quiet",
+            fans: [
+                FanStatusDTO(
+                    index: 0,
+                    actualRPM: 1843,
+                    targetRPM: 2000,
+                    minimumRPM: 800,
+                    maximumRPM: 6000,
+                    mode: "manual"
+                )
+            ],
+            message: nil
+        )
+    )
+
+    #expect(fans.profileLine == "Profile quiet")
+    #expect(fans.rows.map(\.line) == ["Fan 0 · 1843 RPM"])
+    #expect(fans.selectedProfile == .quiet)
+    #expect(fans.emptyLine == "No fans were reported by SMC.")
+    #expect(FanSnapshot.thermalGuardLine == "Thermal guard remains active.")
+}
+
+@Test
+func unknownFanProfileHasNoMenuSelection() {
+    let fans = FanSnapshot.from(sampleFans(profile: "manual", message: nil))
+    #expect(fans.selectedProfile == nil)
+    #expect(fans.profileLine == "Profile manual")
+}
+
+@Test
+func fanWriteErrorStaysOnConnectedSnapshot() {
+    let ping = PingDTO(ok: true, version: "0.2.3", timestamp: Date(timeIntervalSince1970: 0))
+    let battery = sampleBattery(percent: 80, charging: false, pluggedIn: true, limit: "80")
+    let connected = MenuSnapshot.from(ping: ping, battery: battery, fans: sampleFans())
+    let failed = connected.attachingFanWriteError("No writable fan mode keys were detected on this Mac/system.")
+
+    guard case .connected(_, _, let live) = failed else {
+        Issue.record("expected connected snapshot with fan write error")
+        return
+    }
+    #expect(live.lastWriteError == "No writable fan mode keys were detected on this Mac/system.")
+    #expect(live.profileLine == "Profile auto")
 }
 
 private func sampleBattery(
@@ -121,5 +186,18 @@ private func sampleBattery(
         upperBound: 80,
         sleepPolicy: "ignore",
         message: nil
+    )
+}
+
+private func sampleFans(
+    profile: String = "auto",
+    fans: [FanStatusDTO] = [],
+    message: String? = "No fans were reported by SMC."
+) -> FansStatusDTO {
+    FansStatusDTO(
+        timestamp: Date(timeIntervalSince1970: 0),
+        profile: profile,
+        fans: fans,
+        message: message
     )
 }
