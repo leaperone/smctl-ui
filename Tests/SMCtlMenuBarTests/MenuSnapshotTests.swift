@@ -1,71 +1,68 @@
-import XCTest
+import Foundation
+import Testing
 #if canImport(SMCtlProtocol)
 import SMCtlProtocol
 #endif
 @testable import SMCtlMenuBar
 
-final class MenuSnapshotTests: XCTestCase {
-    func testConnectedSnapshotFromFakePingDTO() {
-        let ping = PingDTO(
-            ok: true,
-            version: "0.2.3",
-            timestamp: Date(timeIntervalSince1970: 1_700_000_000)
-        )
-        let battery = sampleBattery(percent: 80, charging: true, pluggedIn: true)
+@Test
+func connectedSnapshotFromFakePingDTO() {
+    let ping = PingDTO(
+        ok: true,
+        version: "0.2.3",
+        timestamp: Date(timeIntervalSince1970: 1_700_000_000)
+    )
+    let battery = sampleBattery(percent: 80, charging: true, pluggedIn: true)
 
-        let snapshot = MenuSnapshot.from(ping: ping, battery: battery)
+    #expect(
+        MenuSnapshot.from(ping: ping, battery: battery)
+            == .connected(pingLine: "smctld ok 0.2.3", statusLine: "Battery 80% · charging")
+    )
+}
 
-        XCTAssertEqual(
-            snapshot,
-            .connected(pingLine: "smctld ok 0.2.3", statusLine: "Battery 80% · charging")
-        )
+@Test
+func pluggedInIdleBatteryLine() {
+    let ping = PingDTO(ok: true, version: "0.1.8", timestamp: Date(timeIntervalSince1970: 0))
+    let battery = sampleBattery(percent: 64, charging: false, pluggedIn: true)
+
+    #expect(
+        MenuSnapshot.from(ping: ping, battery: battery)
+            == .connected(pingLine: "smctld ok 0.1.8", statusLine: "Battery 64% · plugged in")
+    )
+}
+
+@Test
+func failedPingIsDisconnected() {
+    let ping = PingDTO(ok: false, version: "0.2.3", timestamp: Date(timeIntervalSince1970: 0))
+    let battery = sampleBattery(percent: 50, charging: false, pluggedIn: false)
+
+    #expect(
+        MenuSnapshot.from(ping: ping, battery: battery)
+            == .disconnected(message: "Daemon ping returned not ok")
+    )
+}
+
+@Test
+func errorSnapshotIsDisconnectedWithoutLiveDaemon() {
+    struct SampleError: LocalizedError {
+        var errorDescription: String? { "smctld is not running" }
     }
 
-    func testPluggedInIdleBatteryLine() {
-        let ping = PingDTO(ok: true, version: "0.1.8", timestamp: Date(timeIntervalSince1970: 0))
-        let battery = sampleBattery(percent: 64, charging: false, pluggedIn: true)
+    #expect(
+        MenuSnapshot.from(error: SampleError())
+            == .disconnected(message: "smctld is not running")
+    )
+}
 
-        let snapshot = MenuSnapshot.from(ping: ping, battery: battery)
+@Test
+func missingChargePercent() {
+    let ping = PingDTO(ok: true, version: "0.2.3", timestamp: Date(timeIntervalSince1970: 0))
+    let battery = sampleBattery(percent: nil, charging: nil, pluggedIn: nil)
 
-        XCTAssertEqual(
-            snapshot,
-            .connected(pingLine: "smctld ok 0.1.8", statusLine: "Battery 64% · plugged in")
-        )
-    }
-
-    func testFailedPingIsDisconnected() {
-        let ping = PingDTO(ok: false, version: "0.2.3", timestamp: Date(timeIntervalSince1970: 0))
-        let battery = sampleBattery(percent: 50, charging: false, pluggedIn: false)
-
-        let snapshot = MenuSnapshot.from(ping: ping, battery: battery)
-
-        XCTAssertEqual(snapshot, .disconnected(message: "Daemon ping returned not ok"))
-    }
-
-    func testErrorSnapshotIsDisconnectedWithoutLiveDaemon() {
-        let error = NSError(
-            domain: "SMCtlMenuBarTests",
-            code: 4099,
-            userInfo: [NSLocalizedDescriptionKey: "smctld is not running"]
-        )
-
-        XCTAssertEqual(
-            MenuSnapshot.from(error: error),
-            .disconnected(message: "smctld is not running")
-        )
-    }
-
-    func testMissingChargePercent() {
-        let ping = PingDTO(ok: true, version: "0.2.3", timestamp: Date(timeIntervalSince1970: 0))
-        let battery = sampleBattery(percent: nil, charging: nil, pluggedIn: nil)
-
-        let snapshot = MenuSnapshot.from(ping: ping, battery: battery)
-
-        XCTAssertEqual(
-            snapshot,
-            .connected(pingLine: "smctld ok 0.2.3", statusLine: "Battery unavailable")
-        )
-    }
+    #expect(
+        MenuSnapshot.from(ping: ping, battery: battery)
+            == .connected(pingLine: "smctld ok 0.2.3", statusLine: "Battery unavailable")
+    )
 }
 
 private func sampleBattery(percent: Int?, charging: Bool?, pluggedIn: Bool?) -> BatteryStatusDTO {
