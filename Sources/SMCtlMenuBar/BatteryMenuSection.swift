@@ -22,14 +22,14 @@ public struct BatteryMenuSection: View {
                 .accessibilityIdentifier("battery-write-error")
         }
 
-        Divider()
-        ForEach(MaintainPreset.allCases, id: \.self) { preset in
-            Button(title(for: preset)) {
-                perform(.maintain(preset))
-            }
-            .accessibilityIdentifier("maintain-\(preset.rawValue)")
-        }
         if battery.chargingControlSupported {
+            Divider()
+            ForEach(MaintainPreset.allCases, id: \.self) { preset in
+                Button(title(for: preset)) {
+                    perform(.maintain(preset))
+                }
+                .accessibilityIdentifier("maintain-\(preset.rawValue)")
+            }
             Button("Charging on") {
                 perform(.setCharging(true))
             }
@@ -38,8 +38,6 @@ public struct BatteryMenuSection: View {
                 perform(.setCharging(false))
             }
             .accessibilityIdentifier("charging-off")
-        } else {
-            Text("Charging control unsupported")
         }
     }
 

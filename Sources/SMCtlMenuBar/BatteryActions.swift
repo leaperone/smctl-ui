@@ -55,6 +55,10 @@ public enum BatteryActions {
         switch command {
         case .maintain(let preset):
             try client.setChargeLimit(preset.wireLimit)
+            if preset == .stop {
+                _ = try? client.setChargingEnabled(true)
+                _ = try? client.setAdapterEnabled(true)
+            }
         case .setCharging(let enabled):
             try client.setChargingEnabled(enabled)
         }
