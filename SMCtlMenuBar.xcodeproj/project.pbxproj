@@ -12,10 +12,9 @@
 		A10000000000000000000032 /* DaemonSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000012 /* DaemonSession.swift */; };
 		A10000000000000000000033 /* MenuSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000013 /* MenuSnapshot.swift */; };
 		A10000000000000000000034 /* MenuSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000014 /* MenuSnapshotTests.swift */; };
-		A10000000000000000000035 /* SMCtlClient in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000061 /* SMCtlClient */; };
-		A10000000000000000000036 /* SMCtlProtocol in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000062 /* SMCtlProtocol */; };
-		A10000000000000000000037 /* SMCtlClient in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000063 /* SMCtlClient */; };
-		A10000000000000000000038 /* SMCtlProtocol in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000064 /* SMCtlProtocol */; };
+		A10000000000000000000035 /* DaemonClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000015 /* DaemonClient.swift */; };
+		A10000000000000000000036 /* SMCtlClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000016 /* SMCtlClientError.swift */; };
+		A10000000000000000000037 /* SMCtlProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000017 /* SMCtlProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +36,9 @@
 		A10000000000000000000012 /* DaemonSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaemonSession.swift; sourceTree = "<group>"; };
 		A10000000000000000000013 /* MenuSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSnapshot.swift; sourceTree = "<group>"; };
 		A10000000000000000000014 /* MenuSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSnapshotTests.swift; sourceTree = "<group>"; };
+		A10000000000000000000015 /* DaemonClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaemonClient.swift; sourceTree = "<group>"; };
+		A10000000000000000000016 /* SMCtlClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMCtlClientError.swift; sourceTree = "<group>"; };
+		A10000000000000000000017 /* SMCtlProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMCtlProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,8 +46,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A10000000000000000000035 /* SMCtlClient in Frameworks */,
-				A10000000000000000000036 /* SMCtlProtocol in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,8 +53,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A10000000000000000000037 /* SMCtlClient in Frameworks */,
-				A10000000000000000000038 /* SMCtlProtocol in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,7 +62,6 @@
 		A10000000000000000000004 /* SMCtlMenuBar */ = {
 			isa = PBXGroup;
 			children = (
-				A10000000000000000000010 /* SMCtlMenuBarApp.swift */,
 				A10000000000000000000011 /* MenuBarRootView.swift */,
 				A10000000000000000000012 /* DaemonSession.swift */,
 				A10000000000000000000013 /* MenuSnapshot.swift */,
@@ -91,10 +88,41 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		A10000000000000000000018 /* SMCtlMenuBarApp */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000010 /* SMCtlMenuBarApp.swift */,
+			);
+			name = SMCtlMenuBarApp;
+			path = Sources/SMCtlMenuBarApp;
+			sourceTree = "<group>";
+		};
+		A1000000000000000000001A /* SMCtlClient */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000015 /* DaemonClient.swift */,
+				A10000000000000000000016 /* SMCtlClientError.swift */,
+			);
+			name = SMCtlClient;
+			path = Vendor/SMCtlClient;
+			sourceTree = "<group>";
+		};
+		A1000000000000000000001B /* SMCtlProtocol */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000017 /* SMCtlProtocol.swift */,
+			);
+			name = SMCtlProtocol;
+			path = Vendor/SMCtlProtocol;
+			sourceTree = "<group>";
+		};
 		A10000000000000000000090 /* SMCtlMenuBar */ = {
 			isa = PBXGroup;
 			children = (
 				A10000000000000000000004 /* SMCtlMenuBar */,
+				A10000000000000000000018 /* SMCtlMenuBarApp */,
+				A1000000000000000000001A /* SMCtlClient */,
+				A1000000000000000000001B /* SMCtlProtocol */,
 				A10000000000000000000005 /* SMCtlMenuBarTests */,
 				A10000000000000000000009 /* Info.plist */,
 				A10000000000000000000006 /* Products */,
@@ -116,10 +144,6 @@
 			dependencies = (
 			);
 			name = SMCtlMenuBar;
-			packageProductDependencies = (
-				A10000000000000000000061 /* SMCtlClient */,
-				A10000000000000000000062 /* SMCtlProtocol */,
-			);
 			productName = SMCtlMenuBar;
 			productReference = A10000000000000000000007 /* SMCtlMenuBar.app */;
 			productType = "com.apple.product-type.application";
@@ -137,10 +161,6 @@
 				A10000000000000000000081 /* PBXTargetDependency */,
 			);
 			name = SMCtlMenuBarTests;
-			packageProductDependencies = (
-				A10000000000000000000063 /* SMCtlClient */,
-				A10000000000000000000064 /* SMCtlProtocol */,
-			);
 			productName = SMCtlMenuBarTests;
 			productReference = A10000000000000000000008 /* SMCtlMenuBarTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -174,9 +194,6 @@
 				Base,
 			);
 			mainGroup = A10000000000000000000090 /* SMCtlMenuBar */;
-			packageReferences = (
-				A10000000000000000000060 /* XCLocalSwiftPackageReference "Packages/smctl-client" */,
-			);
 			productRefGroup = A10000000000000000000006 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -196,6 +213,9 @@
 				A10000000000000000000031 /* MenuBarRootView.swift in Sources */,
 				A10000000000000000000032 /* DaemonSession.swift in Sources */,
 				A10000000000000000000033 /* MenuSnapshot.swift in Sources */,
+				A10000000000000000000035 /* DaemonClient.swift in Sources */,
+				A10000000000000000000036 /* SMCtlClientError.swift in Sources */,
+				A10000000000000000000037 /* SMCtlProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -354,36 +374,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCLocalSwiftPackageReference section */
-		A10000000000000000000060 /* XCLocalSwiftPackageReference "Packages/smctl-client" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Packages/smctl-client;
-		};
-/* End XCLocalSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		A10000000000000000000061 /* SMCtlClient */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A10000000000000000000060 /* XCLocalSwiftPackageReference "Packages/smctl-client" */;
-			productName = SMCtlClient;
-		};
-		A10000000000000000000062 /* SMCtlProtocol */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A10000000000000000000060 /* XCLocalSwiftPackageReference "Packages/smctl-client" */;
-			productName = SMCtlProtocol;
-		};
-		A10000000000000000000063 /* SMCtlClient */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A10000000000000000000060 /* XCLocalSwiftPackageReference "Packages/smctl-client" */;
-			productName = SMCtlClient;
-		};
-		A10000000000000000000064 /* SMCtlProtocol */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A10000000000000000000060 /* XCLocalSwiftPackageReference "Packages/smctl-client" */;
-			productName = SMCtlProtocol;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A10000000000000000000001 /* Project object */;
 }
