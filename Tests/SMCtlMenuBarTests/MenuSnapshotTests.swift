@@ -73,6 +73,51 @@ func missingChargePercent() {
     #expect(live.chargeLine == "Battery unavailable")
 }
 
+@Test(arguments: [
+    (Int?.none, "70-80", 80),
+    (Int?.none, "stop", 100),
+    (Int?.none, "100", 100),
+    (Int?.none, "off", 100),
+    (Int?.none, "40", 50),
+    (Int?.none, " 70-80 ", 80),
+    (Int?.some(80), "70-80", 80),
+    (Int?.some(100), "stop", 100),
+    (Int?.some(40), "80", 50),
+])
+func chargeLimitCapSeedsSliderFromBoundOrConfiguredLimit(
+    upperBound: Int?,
+    configuredLimit: String,
+    expected: Int
+) {
+    #expect(ChargeLimitCap.seed(upperBound: upperBound, configuredLimit: configuredLimit).value == expected)
+}
+
+@Test
+func snapshotSliderCapPrefersDTOUpperBound() {
+    let band = BatterySnapshot.from(
+        sampleBattery(percent: 75, charging: false, pluggedIn: true, limit: "70-80", upperBound: 80)
+    )
+    let stopped = BatterySnapshot.from(
+        sampleBattery(percent: 90, charging: true, pluggedIn: true, limit: "100", upperBound: 100)
+    )
+
+    #expect(band.sliderCap == 80)
+    #expect(stopped.sliderCap == 100)
+}
+
+@Test
+func snapshotSliderCapParsesConfiguredLimitWhenUpperBoundMissing() {
+    let band = snapshotWithoutUpperBound(limit: "70-80")
+    let stopped = snapshotWithoutUpperBound(limit: "stop")
+    let full = snapshotWithoutUpperBound(limit: "100")
+    let belowFloor = snapshotWithoutUpperBound(limit: "40")
+
+    #expect(band.sliderCap == 80)
+    #expect(stopped.sliderCap == 100)
+    #expect(full.sliderCap == 100)
+    #expect(belowFloor.sliderCap == 50)
+}
+
 @Test
 func maintainBandAndStopDisplay() {
     let band = BatterySnapshot.from(
@@ -170,7 +215,8 @@ private func sampleBattery(
     percent: Int?,
     charging: Bool?,
     pluggedIn: Bool?,
-    limit: String
+    limit: String,
+    upperBound: Int = 80
 ) -> BatteryStatusDTO {
     BatteryStatusDTO(
         timestamp: Date(timeIntervalSince1970: 0),
@@ -183,9 +229,20 @@ private func sampleBattery(
         adapterControlGroup: nil,
         configuredLimit: limit,
         lowerBound: 70,
-        upperBound: 80,
+        upperBound: upperBound,
         sleepPolicy: "ignore",
         message: nil
+    )
+}
+
+private func snapshotWithoutUpperBound(limit: String) -> BatterySnapshot {
+    BatterySnapshot(
+        chargePercent: 70,
+        configuredLimit: limit,
+        isCharging: false,
+        pluggedIn: true,
+        chargingControlSupported: true,
+        adapterControlSupported: true
     )
 }
 
