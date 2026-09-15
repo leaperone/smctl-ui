@@ -13,5 +13,6 @@ struct SMCtlMenuBarApp: App {
         } label: {
             Text("smctl")
         }
+        .menuBarExtraStyle(.window)
     }
 }

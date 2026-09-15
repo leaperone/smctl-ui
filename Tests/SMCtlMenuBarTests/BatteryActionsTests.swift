@@ -21,3 +21,31 @@ func maintainPresetMapsToExactLimitString(preset: MaintainPreset, expected: Stri
 func maintainPresetMatchesConfiguredLimit(configured: String, expected: MaintainPreset) {
     #expect(MaintainPreset.matching(configuredLimit: configured) == expected)
 }
+
+@Test(arguments: [
+    (49, 50),
+    (50, 50),
+    (80, 80),
+    (100, 100),
+    (101, 100),
+])
+func chargeLimitCapClampsToLegalRange(raw: Int, expected: Int) {
+    #expect(ChargeLimitCap(clamping: raw).value == expected)
+}
+
+@Test(arguments: [
+    (72, "72"),
+    (40, "50"),
+    (100, "100"),
+    (110, "100"),
+])
+func setCapWiresClampedDecimalString(raw: Int, expected: String) {
+    #expect(BatteryCommand.setCap(raw).wireLimit == expected)
+    #expect(ChargeLimitCap(clamping: raw).wireLimit == expected)
+}
+
+@Test
+func setCapAtFullMatchesStopWireLimit() {
+    #expect(BatteryCommand.setCap(100).wireLimit == MaintainPreset.stop.wireLimit)
+    #expect(ChargeLimitCap(clamping: 100).isFull)
+}

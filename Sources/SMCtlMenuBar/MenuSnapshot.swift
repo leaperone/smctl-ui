@@ -13,6 +13,7 @@ public enum MenuSnapshot: Equatable, Sendable {
 public struct BatterySnapshot: Equatable, Sendable {
     public var chargePercent: Int?
     public var configuredLimit: String
+    public var upperBound: Int?
     public var isCharging: Bool?
     public var pluggedIn: Bool?
     public var chargingControlSupported: Bool
@@ -28,10 +29,12 @@ public struct BatterySnapshot: Equatable, Sendable {
         chargingControlSupported: Bool,
         adapterControlSupported: Bool,
         daemonMessage: String? = nil,
-        lastWriteError: String? = nil
+        lastWriteError: String? = nil,
+        upperBound: Int? = nil
     ) {
         self.chargePercent = chargePercent
         self.configuredLimit = configuredLimit
+        self.upperBound = upperBound
         self.isCharging = isCharging
         self.pluggedIn = pluggedIn
         self.chargingControlSupported = chargingControlSupported
@@ -49,7 +52,8 @@ public struct BatterySnapshot: Equatable, Sendable {
             chargingControlSupported: battery.chargingControlSupported,
             adapterControlSupported: battery.adapterControlSupported,
             daemonMessage: battery.message,
-            lastWriteError: lastWriteError
+            lastWriteError: lastWriteError,
+            upperBound: battery.upperBound
         )
     }
 
@@ -79,6 +83,10 @@ public struct BatterySnapshot: Equatable, Sendable {
 
     public var selectedMaintain: MaintainPreset? {
         MaintainPreset.matching(configuredLimit: configuredLimit)
+    }
+
+    public var sliderCap: Int {
+        ChargeLimitCap.seed(upperBound: upperBound, configuredLimit: configuredLimit).value
     }
 
     public func attachingWriteError(_ message: String) -> BatterySnapshot {
