@@ -23,15 +23,64 @@ public final class DaemonSession {
         }
     }
 
+    public func perform(_ command: BatteryCommand) {
+        Task {
+            let next = await Task.detached {
+                Self.writeThenFetch(
+                    { try BatteryActions.perform(command) },
+                    attachError: { $0.attachingBatteryWriteError($1) }
+                )
+            }.value
+            self.snapshot = next
+        }
+    }
+
+    public func perform(_ command: FanCommand) {
+        Task {
+            let next = await Task.detached {
+                Self.writeThenFetch(
+                    { try FanActions.perform(command) },
+                    attachError: { $0.attachingFanWriteError($1) }
+                )
+            }.value
+            self.snapshot = next
+        }
+    }
+
     // XPC calls block on a semaphore inside DaemonClient. Never run them on the main actor.
     nonisolated private static func fetchLive() -> MenuSnapshot {
         do {
             let client = DaemonClient()
             let ping = try client.ping()
             let battery = try client.getBatteryStatus()
-            return .from(ping: ping, battery: battery)
+            let fans = try client.getFans()
+            return .from(ping: ping, battery: battery, fans: fans)
         } catch {
             return .from(error: error)
         }
+    }
+
+    nonisolated private static func writeThenFetch(
+        _ write: () throws -> Void,
+        attachError: (MenuSnapshot, String) -> MenuSnapshot
+    ) -> MenuSnapshot {
+        do {
+            try write()
+            return fetchLive()
+        } catch {
+            return snapshotAfterFailedWrite(error, attachError: attachError)
+        }
+    }
+
+    nonisolated private static func snapshotAfterFailedWrite(
+        _ error: Error,
+        attachError: (MenuSnapshot, String) -> MenuSnapshot
+    ) -> MenuSnapshot {
+        let live = fetchLive()
+        let message = MenuSnapshot.errorMessage(error)
+        if case .connected = live {
+            return attachError(live, message.isEmpty ? "Write failed" : message)
+        }
+        return .from(error: error)
     }
 }

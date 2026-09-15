@@ -2,7 +2,7 @@
 
 SwiftUI `MenuBarExtra` companion for [smctl](https://github.com/leaperone/smctl).
 
-Depends on `SMCtlClient` and `SMCtlProtocol` from smctl. Policy stays in `smctld`.
+Depends on `SMCtlClient` and `SMCtlProtocol` from smctl. Policy stays in `smctld`. The extra shows charge percent, the configured limit, and fan RPM (or the SMC no-fans message). It sends maintain (`80`, `70-80`, `stop`), charging on/off, and fan profiles (`auto`, `quiet`, `full`, plus return-to-auto) through `DaemonClient`. Manual RPM entry is not in this menu. Thermal guard stays active on the daemon.
 
 ## Path pin (stack)
 

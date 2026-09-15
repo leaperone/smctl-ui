@@ -13,9 +13,12 @@ public struct MenuBarRootView: View {
             switch session.snapshot {
             case .idle, .loading:
                 Text("Connecting…")
-            case .connected(let pingLine, let statusLine):
+            case .connected(let pingLine, let battery, let fans):
                 Text(pingLine)
-                Text(statusLine)
+                    .accessibilityIdentifier("ping-line")
+                BatteryMenuSection(battery: battery, perform: session.perform)
+                Divider()
+                FanMenuSection(fans: fans, perform: session.perform)
             case .disconnected(let message):
                 Text("Not connected")
                 Text(message)
