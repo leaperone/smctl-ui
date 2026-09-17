@@ -1,0 +1,10 @@
+base_branch = "main"
+
+[[scope]]
+prefix = ""
+name = "SMCtlMenuBar"
+check = "./scripts/pin-smctl.sh && swift test"
+build = "./scripts/pin-smctl.sh && ./scripts/bundle-app.sh release"
+
+[report]
+language = "zh"
