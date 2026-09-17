@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  release:
+    name: GitHub Release
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Checkout smctl
+        uses: actions/checkout@v5
+        with:
+          repository: leaperone/smctl
+          path: .deps/smctl
+          persist-credentials: false
+
+      - name: Pin Vendor
+        run: SMCTL_PATH=.deps/smctl ./scripts/pin-smctl.sh
+
+      - name: Test
+        run: swift test
+
+      - name: Bundle app
+        run: ./scripts/bundle-app.sh release
+
+      - name: Zip app
+        run: ditto -c -k --keepParent .build/SMCtlMenuBar.app SMCtlMenuBar.app.zip
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            SMCtlMenuBar.app.zip \
+            --title "${GITHUB_REF_NAME}" \
+            --notes "Unsigned MenuBarExtra build of smctl-ui. Install and run smctld from [smctl](https://github.com/leaperone/smctl) separately."

@@ -10,3 +10,6 @@ xcuserdata/
 
 # Local Git worktrees
 /.worktrees/
+
+# Local smctl checkout used by scripts/pin-smctl.sh
+/.deps/
