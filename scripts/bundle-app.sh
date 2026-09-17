@@ -4,8 +4,21 @@ set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$root"
 
-swift build -c debug --product SMCtlMenuBar
-bin_dir="$(swift build -c debug --show-bin-path)"
+config="${1:-debug}"
+case "$config" in
+  debug|release) ;;
+  *)
+    echo "usage: $0 [debug|release]" >&2
+    exit 2
+    ;;
+esac
+
+if [[ ! -e Vendor/SMCtlClient/DaemonClient.swift ]]; then
+  ./scripts/pin-smctl.sh
+fi
+
+swift build -c "$config" --product SMCtlMenuBar
+bin_dir="$(swift build -c "$config" --show-bin-path)"
 app="$root/.build/SMCtlMenuBar.app"
 
 rm -rf "$app"

@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  build-and-test:
+    name: Build & Test (macOS)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Checkout smctl
+        uses: actions/checkout@v5
+        with:
+          repository: leaperone/smctl
+          path: .deps/smctl
+
+      - name: Pin Vendor
+        run: SMCTL_PATH=.deps/smctl ./scripts/pin-smctl.sh
+
+      - name: Swift version
+        run: swift --version
+
+      - name: Cache SwiftPM
+        uses: actions/cache@v4
+        with:
+          path: |
+            .build
+            ~/Library/Caches/org.swift.swiftpm
+          key: spm-${{ runner.os }}-${{ hashFiles('Package.swift') }}
+          restore-keys: spm-${{ runner.os }}-
+
+      - name: Build
+        run: swift build --product SMCtlMenuBar
+
+      - name: Test
+        run: swift test
+
+      - name: Release build
+        run: swift build -c release --product SMCtlMenuBar
+
+      - name: Bundle app
+        run: ./scripts/bundle-app.sh release
+
+      - name: Upload app
+        uses: actions/upload-artifact@v4
+        with:
+          name: SMCtlMenuBar
+          path: .build/SMCtlMenuBar.app
+          if-no-files-found: error
