@@ -14,7 +14,7 @@ Depends on `SMCtlClient` and `SMCtlProtocol` from smctl. Policy stays in `smctld
 ./scripts/pin-smctl.sh
 ```
 
-The script prefers a sibling `../smctl` checkout when it already has `Sources/SMCtlClient`. Otherwise it clones [leaperone/smctl](https://github.com/leaperone/smctl) into `.deps/smctl`. CI does the same with `SMCTL_PATH=.deps/smctl`.
+The script links `Vendor/` to `.deps/smctl`, cloning [leaperone/smctl](https://github.com/leaperone/smctl) when that checkout is missing. Override with `SMCTL_PATH=/path/to/smctl`. CI checks out smctl into `.deps/smctl` and sets `SMCTL_PATH`.
 
 ## Build and run
 

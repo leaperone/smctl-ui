@@ -20,15 +20,21 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
 
       - name: Checkout smctl
         uses: actions/checkout@v5
         with:
           repository: leaperone/smctl
           path: .deps/smctl
+          persist-credentials: false
 
       - name: Pin Vendor
         run: SMCTL_PATH=.deps/smctl ./scripts/pin-smctl.sh
+
+      - name: Test
+        run: swift test
 
       - name: Bundle app
         run: ./scripts/bundle-app.sh release
