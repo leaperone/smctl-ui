@@ -10,45 +10,74 @@ public struct BatteryMenuSection: View {
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(battery.chargeLine)
-                .accessibilityIdentifier("battery-charge")
-            Text(battery.limitLine)
-                .accessibilityIdentifier("battery-limit")
+        MenuPanel(title: "Charge", systemImage: "battery.100") {
             if let daemonMessage = battery.daemonMessage, !daemonMessage.isEmpty {
-                Text(daemonMessage)
+                notice(daemonMessage)
             }
             if let lastWriteError = battery.lastWriteError, !lastWriteError.isEmpty {
-                Text(lastWriteError)
+                notice(lastWriteError, isError: true)
                     .accessibilityIdentifier("battery-write-error")
             }
 
             if battery.chargingControlSupported {
-                Divider()
                 ChargeLimitSliderRow(seed: battery.sliderCap, perform: perform)
-                ForEach(MaintainPreset.allCases, id: \.self) { preset in
-                    Button(title(for: preset)) {
+                Text("Maintain")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                MenuChoiceRow(choices: MaintainPreset.allCases.map { preset in
+                    MenuChoice(
+                        id: preset.rawValue,
+                        title: shortTitle(for: preset),
+                        accessibilityLabel: preset.menuTitle,
+                        accessibilityIdentifier: "maintain-\(preset.rawValue)",
+                        isSelected: battery.selectedMaintain == preset
+                    ) {
                         perform(.maintain(preset))
                     }
-                    .accessibilityIdentifier("maintain-\(preset.rawValue)")
-                }
-                Button("Charging on") {
-                    perform(.setCharging(true))
-                }
-                .accessibilityIdentifier("charging-on")
-                Button("Charging off") {
-                    perform(.setCharging(false))
-                }
-                .accessibilityIdentifier("charging-off")
+                })
+                Text("Charging")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                MenuChoiceRow(choices: [
+                    MenuChoice(
+                        id: "charging-on",
+                        title: "On",
+                        accessibilityLabel: "Charging on",
+                        accessibilityIdentifier: "charging-on",
+                        isSelected: false
+                    ) {
+                        perform(.setCharging(true))
+                    },
+                    MenuChoice(
+                        id: "charging-off",
+                        title: "Off",
+                        accessibilityLabel: "Charging off",
+                        accessibilityIdentifier: "charging-off",
+                        isSelected: false
+                    ) {
+                        perform(.setCharging(false))
+                    },
+                ])
             }
         }
     }
 
-    private func title(for preset: MaintainPreset) -> String {
-        if battery.selectedMaintain == preset {
-            return "✓ \(preset.menuTitle)"
+    private func shortTitle(for preset: MaintainPreset) -> String {
+        switch preset {
+        case .cap80:
+            return "80"
+        case .band7080:
+            return "70–80"
+        case .stop:
+            return "Off"
         }
-        return preset.menuTitle
+    }
+
+    private func notice(_ text: String, isError: Bool = false) -> some View {
+        Text(text)
+            .font(.caption)
+            .foregroundStyle(isError ? Color.red : Color.secondary)
+            .fixedSize(horizontal: false, vertical: true)
     }
 }
 
@@ -66,13 +95,20 @@ private struct ChargeLimitSliderRow: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("Charge limit \(Int(draft.rounded()))%")
-                .accessibilityIdentifier("charge-limit-label")
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Text("Limit")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Text("\(shown)%")
+                    .font(.subheadline.weight(.semibold))
+                    .monospacedDigit()
+                    .accessibilityIdentifier("charge-limit-label")
+            }
             Slider(
                 value: $draft,
-                in: Double(ChargeLimitCap.range.lowerBound)...Double(ChargeLimitCap.range.upperBound),
-                step: 1
+                in: Double(ChargeLimitCap.range.lowerBound)...Double(ChargeLimitCap.range.upperBound)
             ) { editing in
                 isEditing = editing
                 guard !editing else { return }
@@ -83,12 +119,24 @@ private struct ChargeLimitSliderRow: View {
                 }
             }
             .accessibilityIdentifier("charge-limit-slider")
-            .accessibilityValue("\(Int(draft.rounded())) percent")
+            .accessibilityValue("\(shown) percent")
+            HStack {
+                Text("\(ChargeLimitCap.range.lowerBound)")
+                Spacer()
+                Text("\(ChargeLimitCap.range.upperBound)")
+            }
+            .font(.caption2)
+            .foregroundStyle(.tertiary)
+            .monospacedDigit()
         }
         .onChange(of: seed) { _, newValue in
             if !isEditing {
                 draft = Double(newValue)
             }
         }
+    }
+
+    private var shown: Int {
+        Int(draft.rounded())
     }
 }
